@@ -1,27 +1,18 @@
 provider "google" {
   credentials = file("service-account.json")
-  project = "mms-cfo-playground2006-a-710x"
-  region = "europe-west4"
-  zone = "europe-west4-b"
+  project     = "mms-cfo-playground2007-a-h0zz"
+  region      = "europe-west4"
+  zone        = "europe-west4-b"
 }
 
-resource "google_compute_instance" "vm_instance" {
-  name = "terraform-instance"
-  machine_type = "f1-micro"
+module "instance" {
+  source = "./modules/instance"
 
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-9"
-    }
-  }
-
-  network_interface {
-    # A default network is created for all GCP projects.
-    network = google_compute_network.vpc_network.self_link
-  }
+  name    = "terraform-instance"
+  network = google_compute_network.vpc_network.self_link
 }
 
 resource "google_compute_network" "vpc_network" {
-  name = "terraform-network"
+  name                    = "terraform-network"
   auto_create_subnetworks = "true"
 }
