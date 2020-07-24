@@ -9,6 +9,9 @@ out/
 .terraform
 terraform.tfstate
 terraform.tfstate.backup
+.terraform.tfstate.lock.info
 
 ### Service Account ###
-service-account.json
+service-account-h0zz.json
+service-account-h0zw.json
+service-account-3k3t.json
