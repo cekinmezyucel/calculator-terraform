@@ -5,24 +5,27 @@ provider "google" {
   zone        = var.zone
 }
 
-module "instance" {
-  source  = "./modules/google_compute_instance"
-  name    = "terraform-instance"
-  network = module.network.network_self_link
-}
-
-module "network" {
-  source                  = "git@github.com:cekinmezyucel/terraform-google-network-module.git?ref=v0.1-alpha"
-  name                    = "terraform-network"
-  auto_create_subnetworks = true
-  project_id              = var.project_id
-  routing_mode            = "REGIONAL"
-}
-
 resource "google_project_service" "service" {
   for_each                   = toset(["compute.googleapis.com", "oslogin.googleapis.com", "serviceusage.googleapis.com", "cloudresourcemanager.googleapis.com"])
   service                    = each.key
   project                    = var.project_name
   disable_on_destroy         = false
   disable_dependent_services = false
+}
+
+module "network" {
+  source = "../terraform-google-network-module"
+
+  name                    = "terraform-network"
+  auto_create_subnetworks = true
+  project_id              = var.project_id
+  routing_mode            = "REGIONAL"
+}
+
+module "k8s" {
+  source = "../terraform-google-k8s-module"
+
+  project_id           = var.project_id
+  network_self_link    = module.network.network_self_link
+  subnetwork_self_link = module.network.network_self_link # Right now subnetwork name is the same as network name
 }
