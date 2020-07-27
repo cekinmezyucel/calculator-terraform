@@ -9,6 +9,11 @@ variable "project_id" {
   type        = string
 }
 
+variable "environment" {
+  description = "Environment of the project [dev, test, prod]"
+  type        = string
+}
+
 variable "region" {
   description = "Region if the Infrastructure"
   type        = string

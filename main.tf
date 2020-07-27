@@ -16,7 +16,7 @@ resource "google_project_service" "service" {
 module "network" {
   source = "../terraform-google-network-module"
 
-  name                    = "terraform-network"
+  name                    = var.environment
   auto_create_subnetworks = true
   project_id              = var.project_id
   routing_mode            = "REGIONAL"
