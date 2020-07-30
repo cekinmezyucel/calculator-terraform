@@ -28,4 +28,5 @@ module "k8s" {
   project_id           = var.project_id
   network_self_link    = module.network.network_self_link
   subnetwork_self_link = module.network.network_self_link # Right now subnetwork name is the same as network name
+  gitops_enabled       = false
 }
