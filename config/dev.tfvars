@@ -1,6 +1,6 @@
 # Project
-project_name = "mms-cfo-playground2007-a-3k3t"
-project_id   = "mms-cfo-playground2007-a-3k3t"
+project_name = "mms-cfo-playground2008-a-vxer"
+project_id   = "mms-cfo-playground2008-a-vxer"
 environment  = "dev"
 region       = "europe-west4"
 zone         = "europe-west4-b"

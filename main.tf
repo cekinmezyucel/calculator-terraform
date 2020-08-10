@@ -1,12 +1,12 @@
 provider "google" {
-  credentials = file("service-account-3k3t.json")
+  credentials = file("service-account-vxer.json")
   project     = var.project_name
   region      = var.region
   zone        = var.zone
 }
 
 resource "google_project_service" "service" {
-  for_each                   = toset(["compute.googleapis.com", "oslogin.googleapis.com", "serviceusage.googleapis.com", "cloudresourcemanager.googleapis.com"])
+  for_each                   = toset(local.project_services)
   service                    = each.key
   project                    = var.project_name
   disable_on_destroy         = false
@@ -16,10 +16,13 @@ resource "google_project_service" "service" {
 module "network" {
   source = "../terraform-google-network-module"
 
-  name                    = var.environment
-  auto_create_subnetworks = true
-  project_id              = var.project_id
-  routing_mode            = "REGIONAL"
+  name            = var.environment
+  project_id      = var.project_id
+  routing_mode    = "REGIONAL"
+  cidr            = "10.0.0.0/22"
+  subnetwork_name = var.environment
+  region          = var.region
+  depends_on      = [google_project_service.service]
 }
 
 module "k8s" {
@@ -27,6 +30,6 @@ module "k8s" {
 
   project_id           = var.project_id
   network_self_link    = module.network.network_self_link
-  subnetwork_self_link = module.network.network_self_link # Right now subnetwork name is the same as network name
+  subnetwork_self_link = module.network.subnetwork_self_link
   gitops_enabled       = false
 }
