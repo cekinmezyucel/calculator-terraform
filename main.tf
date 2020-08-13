@@ -28,8 +28,9 @@ module "network" {
 module "k8s" {
   source = "../terraform-google-k8s-module"
 
+  name                 = var.environment
   project_id           = var.project_id
   network_self_link    = module.network.network_self_link
   subnetwork_self_link = module.network.subnetwork_self_link
-  gitops_enabled       = false
+  gitops_enabled       = true
 }
